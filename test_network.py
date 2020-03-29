@@ -1,6 +1,3 @@
-# USAGE
-# python test_network.py --model santa_not_santa.model --image images/examples/santa_01.png
-
 # import the necessary packages
 from keras.preprocessing.image import img_to_array
 from keras.models import load_model
@@ -12,9 +9,9 @@ import cv2
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", required=True,
-	help="path to trained model model")
+                help="path to trained model model")
 ap.add_argument("-i", "--image", required=True,
-	help="path to input image")
+                help="path to input image")
 args = vars(ap.parse_args())
 
 # load the image
@@ -35,25 +32,26 @@ model = load_model(args["model"])
 (notSanta, santa) = model.predict(image)[0]
 
 # build the label
+# print label to later be logged in out.txt
 label = "COVIDPOSITIVE" if santa > notSanta else "COVIDNEGATIVE"
 if label == "COVIDPOSITIVE":
-  print("COVIDPOSITIVE")
+    print("COVIDPOSITIVE")
 
 if label == "Not Santa":
-  print("COVIDNEGATIVE")	
+    print("COVIDNEGATIVE")
 
+# print probability to later be logged in out.txt
 proba = santa if santa > notSanta else notSanta
-print (proba)
+print(proba)
 label = "{}: {:.2f}%".format(label, proba * 100)
 
 
-
+# Uncomment following if visual windows output required as well
 # draw the label on the image
 #output = imutils.resize(orig, width=400)
 #cv2.putText(output, label, (10, 25),  cv2.FONT_HERSHEY_SIMPLEX,
-#	0.7, (0, 255, 0), 2)
+#            0.7, (0, 255, 0), 2)
 
 # show the output image
 #cv2.imshow("Output", output)
 #cv2.waitKey(0)
-

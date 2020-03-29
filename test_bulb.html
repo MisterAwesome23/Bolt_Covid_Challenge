@@ -1,0 +1,227 @@
+<html>
+
+<head>
+  <!-- In following  line will load the boltCommands.js files from Bolt cloud.-->
+  <script type="text/javascript" src="https://cloud.boltiot.com/static/js/boltCommands.js">
+  </script>
+  <script type="text/javascript">
+    // The following line will set the api key and device name. It will be auto-initialized by Bolt cloud.
+    setKey('{{ApiKey}}', '{{Name}}');
+  </script>
+</head>
+
+<body>
+  <center>
+    <!-- In below line, We are calling the digitalWrite function from  boltCommands.js file to switch on the LED. -->
+    <button onclick="digitalWrite(0, 'HIGH');">ON LED 0</button>
+    <!-- In below line, we are calling the digitalWrite function from boltCommands.js file to switch off the LED. -->
+    <button onclick="digitalWrite(0, 'LOW');">OFF LED 0</button>
+    <!-- In below line, We are calling the digitalWrite function from  boltCommands.js file to switch on the LED. -->
+    <button onclick="digitalWrite(1, 'HIGH');">ON LED 1</button>
+    <!-- In below line, we are calling the digitalWrite function from boltCommands.js file to switch off the LED. -->
+    <button onclick="digitalWrite(1, 'LOW');">OFF LED 1</button>
+
+    <center>
+      <h1>Quiz Questions</h1>
+    </center>
+    <p>
+      <form name="quiz">
+        <p>
+          <b>Question 1.
+            <br>Have you traveled internationally in the last two months or domestically in the last three
+            weeks?<br></b>
+          <blockquote>
+            <input type="radio" name="q1" value="Yes">Yes<br>
+            <input type="radio" name="q1" value="No">No<br>
+          </blockquote>
+          <p><b>
+              <hr>
+              Question 2.
+              <br>Have you been in contact with anyone you know who has been tested positive or recovered from Corona
+              Virus?<br></b>
+            <blockquote>
+              <input type="radio" name="q2" value="Yes">Yes<br>
+              <input type="radio" name="q2" value="No">No<br>
+            </blockquote>
+            <p><b>
+                <hr>
+                Question 3.
+                <br>Have you had close contact with someone who has traveled to an area with an outbreak?<br></b>
+              <blockquote>
+                <input type="radio" name="q3" value="Yes">Yes<br>
+                <input type="radio" name="q3" value="No">No<br>
+              </blockquote>
+              <p><b>
+                  <hr>
+                  Question 4.
+                  <br>Do you have medical problems like high blood pressure, heart problems or diabetes, or chronic
+                  respiratory conditions?<br></b>
+                <blockquote>
+                  <input type="radio" name="q4" value="Yes">Yes<br>
+                  <input type="radio" name="q4" value="No">No<br>
+                </blockquote>
+                <p><b>
+                    <hr>
+                    Question 5.
+                    <br>Do you have a high temperature (you feel hot to touch on your chest or back)?<br></b>
+                  <blockquote>
+                    <input type="radio" name="q5" value="Yes">Yes<br>
+                    <input type="radio" name="q5" value="No">No<br>
+                  </blockquote>
+                  <p><b>
+                      <hr>
+                      Question 6.
+                      <br>Do you have a new continuous cough – (this means you’ve started coughing repeatedly)?<br></b>
+                    <blockquote>
+                      <input type="radio" name="q6" value="Yes">Yes<br>
+                      <input type="radio" name="q6" value="No">No<br>
+                    </blockquote>
+                    <p><b>
+                        Question 7.
+                        <br>Do you have mild Fever, tiredness and a mild dry cough?<br></b>
+                      <blockquote>
+                        <input type="radio" name="q7" value="Yes">Yes<br>
+                        <input type="radio" name="q7" value="No">No<br>
+                      </blockquote>
+                      <p><b>
+                          <hr>
+                          Question 8.
+                          <br>Do you have a runny nose sore throat or nasal congestion and aches or pains or
+                          diarrhea?<br></b>
+                        <blockquote>
+                          <input type="radio" name="q8" value="Yes">Yes<br>
+                          <input type="radio" name="q8" value="No">No<br>
+                        </blockquote>
+                        <p><b>
+                            <hr>
+                            <p><b>
+                                <input type="button" value="Grade Me" onClick="getScore(this.form);">
+                                <input type="reset" value="Clear">
+                                <p>
+                                  Score of being safe out of 8 = <input type=text size 8 name="mark">
+                                  Score in percentage = <input type=text size=8 name="percentage"><br>
+      </form>
+      <p>
+        <form method="post" name="Form" onsubmit="" action="">
+        </form>
+
+        <script>
+          var numQues = 8;
+          var numChoi = 2;
+          var answers = new Array(8);
+
+          answers[0] = "No";
+          answers[1] = "No";
+          answers[2] = "No";
+          answers[3] = "No";
+          answers[4] = "No";
+          answers[5] = "No";
+          answers[6] = "No";
+          answers[7] = "No";
+
+          function getScore(form) {
+            var score = 0;
+            var currElt;
+            var currSelection;
+
+            for (i = 0; i < numQues; i++) {
+              currElt = i * numChoi;
+              answered = false;
+
+              for (j = 0; j < numChoi; j++) {
+                currSelection = form.elements[currElt + j];
+
+                if (currSelection.checked) {
+                  answered = true;
+
+                  if (currSelection.value == answers[i]) {
+                    score++;
+                    break;
+                  }
+                }
+              }
+
+              if (answered === false) { alert("Do answer all the questions, Please"); return false; }
+
+            }
+
+            var scoreper;
+            scoreper = Math.round(score / numQues * 100);
+            form.percentage.value = scoreper + "%";
+            form.mark.value = score; 4
+
+            if (score > 5) {
+              alert("You're fine. Take precautions");
+              digitalWrite(0, 'HIGH');
+              setTimeout(function () { digitalWrite(0, 'LOW') }, 10000);
+              alert("Orange color LED glowing");
+              //await sleep(5000);
+              //digitalWrite(0, 'LOW');
+
+            } else {
+              alert("Have a checkup immediately");
+              digitalWrite(1, 'HIGH');
+              //await sleep(5000);
+              //digitalWrite(1, 'LOW');
+              setTimeout(function () { digitalWrite(1, 'LOW') }, 10000);
+              alert("RED-Multi color LED glowing");
+            }
+          }
+
+        </script>
+
+        <script>
+          window.onload = function () {
+            document.getElementById("Save").onclick = function fun() {
+              //var x = document.forms["myForm"]["ip_address"].value;
+              var Url = "http://127.0.0.1:8000";
+              var xhr = new XMLHttpRequest();
+              xhr.open('GET', Url, true);
+              xhr.send();
+              xhr.onreadystatechange = processRequest;
+              function processRequest(e) {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                  //alert(xhr.responseText);
+                  var response1 = JSON.parse(xhr.responseText);
+                  //alert(response1);
+                  var ResultCovidTest = response1.Result;
+                  var AccuracyCovidTest = response1.Accuracy;
+                  if (ResultCovidTest == "COVIDPOSITIVE\n") {
+                    alert("COVID +");
+                    alert(AccuracyCovidTest);
+                    digitalWrite(1, 'HIGH');
+                    //await sleep(5000);
+                    //digitalWrite(1, 'LOW');
+                    setTimeout(function () { digitalWrite(1, 'LOW') }, 10000);
+                    alert("RED-Multi color LED glowing");
+
+                  } else if (ResultCovidTest == "COVIDNEGATIVE\n") {
+                    alert("COVID -");
+                    alert(AccuracyCovidTest);
+                    digitalWrite(0, 'HIGH');
+                    //await sleep(5000);
+                    //digitalWrite(0, 'LOW');
+                    setTimeout(function () { digitalWrite(0, 'LOW') }, 10000);
+                    alert("Orange color LED glowing");
+                  }
+
+                }
+              }
+            }
+          }
+        </script>
+        </head>
+
+        <a href="https://driveuploader.com/upload/mWEWNhPm47/"> Upload a file </a>
+
+        <body>
+          <center>
+            Use Machine learning (Deep Learning) to make a prediction on the uploaded X-Ray Scan
+            <br> <br>
+            <form name="myForm">
+              <input type="button" id="Save" onclick="f1()" value="test" />
+            </form>
+          </center>
+        </body>
+
+</html>
